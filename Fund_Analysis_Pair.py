@@ -30,6 +30,7 @@ if __name__ == '__main__':
     os.chdir(data_file_path)
     ### Read the file
     df_data = put.concat_data('test_data.xlsx')
+    df_data_other = put.concat_data('other_fund.xlsx')
     ### Define constant variable
     # Initial value for static ratio calculation
     target_year = ['1_Year','3_Year','5_Year','7_Year','Since Inception']
@@ -40,6 +41,7 @@ if __name__ == '__main__':
     summary_columns = ['Batting Average', 'Omega Ratio', 'Up Months', 'Down Months', 'Slugging Ratio', 'Up-Capture Russell', 'Down-Capture Russell']
     index_name = df_data.columns[1:-1] # No Date and Market Index
     index_name_2 = df_data.columns[0:-1] # No Market Index
+    index_name_2_other = df_data_other.columns[0:-1] # No Market Index
     index_name_3 = df_data.columns[1:] # No Date
     columns_name = df_data.columns[1:] # No Date
     # Initial value for rolling data calculation
@@ -50,6 +52,7 @@ if __name__ == '__main__':
     Annulized_Return_df = r.annulized_return_table(df_data, index_name, target_year)
     ### Calculate Calendar Return
     Calendar_Return_df = r.calendar_return_table(df_data, index_name_2)
+    Calendar_Return_df_other = r.calendar_return_table(df_data_other, index_name_2_other)
     ### Calculate Downside Deviation, given order of two
     Downside_Deviation_df = r.downside_std_table(df_data, index_name, threshold, target_year)
     ### Calculate Sortino ratio
@@ -74,8 +77,7 @@ if __name__ == '__main__':
     Corr_df_np = r.corr_table(df_data, index_name_3, market_index, target_year, condition='Non-positive')    
     ### Summary table
     Summary_table_df = r.summary_table(df_data,index_name, summary_columns, market_index, MAR)
-    
-    
+
     ### Rolling beta
     rolling_beta_df = m.rolling_beta(df_data, columns_name, window_length, min_periods)
     ### Rolling annulized return
@@ -92,17 +94,16 @@ if __name__ == '__main__':
     rolling_alpha_df = m.rolling_alpha(df_data, columns_name, window_length, min_periods)
     ### Rolling correlation
     rolling_corr_df = m.rolling_corr(df_data, columns_name, market_index, window_length, min_periods)
-    ### Draw Down
-    dd_df = 100* m.draw_down(df_data, columns_name)
-    
-    
+   
     
     
     ### Plotly Table ###
+    ## py.sign_in('fzn0728', '1enskD2UuiVkZbqcMZ5K')
+    py.sign_in('fzn07289', 'TMIrmI4FoHE7W5VHKgTQ')
     # Annual Return Table
     Annulized_Return_df = round(Annulized_Return_df,3)
     table_Annulized_Return = FF.create_table(Annulized_Return_df, index=True)
-    py.plot(table_Annulized_Return, filename='Table 1 Annulized Return')
+    py.plot(table_Annulized_Return, filename='Table 1 Annualized Return')
     # Annual Return Plot
     trace1 = go.Scatter(
         x=rolling_annual_return_df.index,
@@ -134,12 +135,417 @@ if __name__ == '__main__':
         )
     fig_1 = go.Figure(data=data, layout=layout)
     plot_url_1 = py.plot(fig_1, filename='Figure 1 Rolling Annual Return of Pair Funds', sharing='public')
-    
+    # Annualized Return Plot #
+    trace0=go.Box(
+        y = Annulized_Return_df.ix[:,'1_Year'].values,
+        name = '1_Year',
+        showlegend=False
+                  )
+    trace1=go.Box(
+        y = Annulized_Return_df.ix[:,'3_Year'],
+        name = '3_Year',
+        showlegend=False
+              )    
+    trace2=go.Box(
+        y = Annulized_Return_df.ix[:,'5_Year'],
+        name = '5_Year',
+        showlegend=False
+                  )    
+    trace3=go.Box(
+        y = Annulized_Return_df.ix[:,'7_Year'],
+        name = '7_Year',
+        showlegend=False
+                  )    
+    trace4=go.Box(
+        y = Annulized_Return_df.ix[:,'Since Inception'],
+        name = 'Since Inception',
+        showlegend=False
+                  )
+    trace10=go.Scatter(
+        x = Annulized_Return_df.T.index,
+        y = Annulized_Return_df.ix['A'].values,
+        mode = 'markers',
+        marker = dict(size=15, opacity=0.3),
+        name = 'A'
+        )
+    trace11=go.Scatter(
+        x = Annulized_Return_df.T.index,
+        y = Annulized_Return_df.ix['B'].values,
+        mode = 'markers',
+        marker = dict(size=15, opacity=0.3),
+        name = 'B'
+        )
+    trace12=go.Scatter(
+        x = Annulized_Return_df.T.index,
+        y = Annulized_Return_df.ix['C'].values,
+        mode = 'markers',
+        marker = dict(size=15, opacity=0.3),
+        name = 'C'
+        )
+    trace13=go.Scatter(
+        x = Annulized_Return_df.T.index,
+        y = Annulized_Return_df.ix['D'].values,
+        mode = 'markers',
+        marker = dict(size=15, opacity=0.3),
+        name = 'D'
+        )
+    trace14=go.Scatter(
+        x = Annulized_Return_df.T.index,
+        y = Annulized_Return_df.ix['E'].values,
+        mode = 'markers',
+        marker = dict(size=15, opacity=0.3),
+        name = 'E'
+        )
+    trace15=go.Scatter(
+        x = Annulized_Return_df.T.index,
+        y = Annulized_Return_df.ix['F'].values,
+        mode = 'markers',
+        marker = dict(size=15, opacity=0.3),
+        name = 'F'
+        )
+    trace16=go.Scatter(
+        x = Annulized_Return_df.T.index,
+        y = Annulized_Return_df.ix['G'].values,
+        mode = 'markers',
+        marker = dict(size=15, opacity=0.3),
+        name = 'G'
+        )
+    trace17=go.Scatter(
+        x = Annulized_Return_df.T.index,
+        y = Annulized_Return_df.ix['H'].values,
+        mode = 'markers',
+        marker = dict(size=15, opacity=0.3),
+        name = 'H'
+        )
+    trace18=go.Scatter(
+        x = Annulized_Return_df.T.index,
+        y = Annulized_Return_df.ix['I'].values,
+        mode = 'markers',
+        marker = dict(size=15, opacity=0.3),
+        name = 'I'
+        )
+    trace19=go.Scatter(
+        x = Annulized_Return_df.T.index,
+        y = Annulized_Return_df.ix['J'].values,
+        mode = 'markers',
+        marker = dict(size=15, opacity=0.3),
+        name = 'J'
+        )
+    trace20=go.Scatter(
+        x = Annulized_Return_df.T.index,
+        y = Annulized_Return_df.ix['I'].values,
+        mode = 'markers',
+        marker = dict(size=15, opacity=0.3),
+        name = 'X'
+        )
+    trace21=go.Scatter(
+        x = Annulized_Return_df.T.index,
+        y = Annulized_Return_df.ix['J'].values,
+        mode = 'markers',
+        marker = dict(size=15, opacity=0.3),
+        name = 'XX'
+        )
+    data = [trace0,trace1,trace2,trace3,trace4,trace10,trace11,trace12,trace13,\
+            trace14,trace15,trace16,trace17,trace18,trace19,trace20,trace21]
+    layout = go.Layout(
+        title='Annulized Return of Pair Funds',
+        showlegend=True,
+        yaxis=dict(
+            title='Annulized Return')
+        )
+    fig_2 = go.Figure(data=data, layout=layout)
+    plot_url_2 = py.plot(fig_2, filename='Figure 2 Annulized Return of Pair Funds')    
 
     # Calendar Return Table
     Calendar_Return_df = round(Calendar_Return_df,3)
     table_Calendar_Return = FF.create_table(Calendar_Return_df, index=True)
     py.plot(table_Calendar_Return, filename='Table 2 Calendar Return of Pair Funds')    
+    # Calendar Return Plot #
+    trace0=go.Box(
+        y = Calendar_Return_df.ix[:,2007].values,
+        name = '2007',
+        showlegend=False
+                  )
+    trace1=go.Box(
+        y = Calendar_Return_df.ix[:,2008],
+        name = '2008',
+        showlegend=False
+              )    
+    trace2=go.Box(
+        y = Calendar_Return_df.ix[:,2009],
+        name = '2009',
+        showlegend=False
+                  )    
+    trace3=go.Box(
+        y = Calendar_Return_df.ix[:,2010],
+        name = '2010',
+        showlegend=False
+                  )    
+    trace4=go.Box(
+        y = Calendar_Return_df.ix[:,2011],
+        name = '2011',
+        showlegend=False
+                  )    
+    trace5=go.Box(
+        y = Calendar_Return_df.ix[:,2012],
+        name = '2012',
+        showlegend=False
+                  )    
+    trace6=go.Box(
+        y = Calendar_Return_df.ix[:,2013],
+        name = '2013',
+        showlegend=False
+                  )    
+    trace7=go.Box(
+        y = Calendar_Return_df.ix[:,2014],
+        name = '2014',
+        showlegend=False
+                  )
+    trace8=go.Box(
+        y = Calendar_Return_df.ix[:,2015],
+        name = '2015',
+        showlegend=False
+                  )
+    trace9=go.Box(
+        y = Calendar_Return_df.ix[:,2016],
+        name = '2016',
+        showlegend=False
+                  )
+    trace10=go.Scatter(
+        x = Calendar_Return_df.T.index,
+        y = Calendar_Return_df.ix['A'].values,
+        mode = 'markers',
+        marker = dict(size=15, opacity=0.3),
+        name = 'A'
+        )
+    trace11=go.Scatter(
+        x = Calendar_Return_df.T.index,
+        y = Calendar_Return_df.ix['B'].values,
+        mode = 'markers',
+        marker = dict(size=15, opacity=0.3),
+        name = 'B'
+        )
+    trace12=go.Scatter(
+        x = Calendar_Return_df.T.index,
+        y = Calendar_Return_df.ix['C'].values,
+        mode = 'markers',
+        marker = dict(size=15, opacity=0.3),
+        name = 'C'
+        )
+    trace13=go.Scatter(
+        x = Calendar_Return_df.T.index,
+        y = Calendar_Return_df.ix['D'].values,
+        mode = 'markers',
+        marker = dict(size=15, opacity=0.3),
+        name = 'D'
+        )
+    trace14=go.Scatter(
+        x = Calendar_Return_df.T.index,
+        y = Calendar_Return_df.ix['E'].values,
+        mode = 'markers',
+        marker = dict(size=15, opacity=0.3),
+        name = 'E'
+        )
+    trace15=go.Scatter(
+        x = Calendar_Return_df.T.index,
+        y = Calendar_Return_df.ix['F'].values,
+        mode = 'markers',
+        marker = dict(size=15, opacity=0.3),
+        name = 'F'
+        )
+    trace16=go.Scatter(
+        x = Calendar_Return_df.T.index,
+        y = Calendar_Return_df.ix['G'].values,
+        mode = 'markers',
+        marker = dict(size=15, opacity=0.3),
+        name = 'G'
+        )
+    trace17=go.Scatter(
+        x = Calendar_Return_df.T.index,
+        y = Calendar_Return_df.ix['H'].values,
+        mode = 'markers',
+        marker = dict(size=15, opacity=0.3),
+        name = 'H'
+        )
+    trace18=go.Scatter(
+        x = Calendar_Return_df.T.index,
+        y = Calendar_Return_df.ix['I'].values,
+        mode = 'markers',
+        marker = dict(size=15, opacity=0.3),
+        name = 'I'
+        )
+    trace19=go.Scatter(
+        x = Calendar_Return_df.T.index,
+        y = Calendar_Return_df.ix['J'].values,
+        mode = 'markers',
+        marker = dict(size=15, opacity=0.3),
+        name = 'J'
+        )
+    data = [trace0,trace1,trace2,trace3,trace4,trace5,trace6,trace7,trace8,\
+            trace9,trace10,trace11,trace12,trace13,trace14,trace15,trace16,\
+            trace17,trace18,trace19]
+    layout = go.Layout(
+        title='Calendar Return of Pair Funds',
+        showlegend=True,
+        yaxis=dict(
+            title='Calendar Return')
+        )
+    fig_2 = go.Figure(data=data, layout=layout)
+    plot_url_2 = py.plot(fig_2, filename='Figure 2 Calendar Return of Pair Funds')
+    # Double Box Chart with Fund and other Funds
+    c = ['hsl('+str(h)+',50%'+',50%)' for h in np.linspace(0, 360, 20)]
+    trace0=go.Box(
+        y = Calendar_Return_df.ix[:,2007].values,
+        name = '2007',
+        marker=dict(
+                    color=c[0]
+                    )
+                  )
+    trace1=go.Box(
+        y = Calendar_Return_df.ix[:,2008],
+        name = '2008',
+        marker=dict(
+                    color=c[0]
+                    )
+                  )    
+    trace2=go.Box(
+        y = Calendar_Return_df.ix[:,2009],
+        name = '2009',
+        marker=dict(
+                    color=c[0]
+                    )
+                  )    
+    trace3=go.Box(
+        y = Calendar_Return_df.ix[:,2010],
+        name = '2010',
+        marker=dict(
+                    color=c[0]
+                    )
+                  )    
+    trace4=go.Box(
+        y = Calendar_Return_df.ix[:,2011],
+        name = '2011',
+        marker=dict(
+                    color=c[0]
+                    )
+                  )    
+    trace5=go.Box(
+        y = Calendar_Return_df.ix[:,2012],
+        name = '2012',
+        marker=dict(
+                    color=c[0]
+                    )
+                  )    
+    trace6=go.Box(
+        y = Calendar_Return_df.ix[:,2013],
+        name = '2013',
+        marker=dict(
+                    color=c[0]
+                    )
+                  )    
+    trace7=go.Box(
+        y = Calendar_Return_df.ix[:,2014],
+        name = '2014',
+        marker=dict(
+                    color=c[0]
+                    )
+                  )
+    trace8=go.Box(
+        y = Calendar_Return_df.ix[:,2015],
+        name = '2015',
+        marker=dict(
+                    color=c[0]
+                    )
+                  )
+    trace9=go.Box(
+        y = Calendar_Return_df.ix[:,2016],
+        name = '2016',
+        marker=dict(
+                    color=c[0]
+                    )
+                  )
+    trace10=go.Box(
+        y = Calendar_Return_df_other.ix[:,2007].values,
+        name = '2007',
+        marker=dict(
+                    color=c[9]
+                    )
+                  )
+    trace11=go.Box(
+        y = Calendar_Return_df_other.ix[:,2008],
+        name = '2008',
+        marker=dict(
+                    color=c[9]
+                    )
+              )    
+    trace12=go.Box(
+        y = Calendar_Return_df_other.ix[:,2009],
+        name = '2009',
+        marker=dict(
+                    color=c[9]
+                    )
+                  )    
+    trace13=go.Box(
+        y = Calendar_Return_df_other.ix[:,2010],
+        name = '2010',
+        marker=dict(
+                    color=c[9]
+                    )
+                  )    
+    trace14=go.Box(
+        y = Calendar_Return_df_other.ix[:,2011],
+        name = '2011',
+        marker=dict(
+                    color=c[9]
+                    )
+                  )    
+    trace15=go.Box(
+        y = Calendar_Return_df_other.ix[:,2012],
+        name = '2012',
+        marker=dict(
+                    color=c[9]
+                    )
+                  )    
+    trace16=go.Box(
+        y = Calendar_Return_df_other.ix[:,2013],
+        name = '2013',
+        marker=dict(
+                    color=c[9]
+                    )
+                  )    
+    trace17=go.Box(
+        y = Calendar_Return_df_other.ix[:,2014],
+        name = '2014',
+        marker=dict(
+                    color=c[9]
+                    )
+                  )
+    trace18=go.Box(
+        y = Calendar_Return_df_other.ix[:,2015],
+        name = '2015',
+        marker=dict(
+                    color=c[9]
+                    )
+                  )
+    trace19=go.Box(
+        y = Calendar_Return_df_other.ix[:,2016],
+        name = '2016',
+        marker=dict(
+                    color=c[9]
+                    )
+                  )
+    data = [trace0,trace1,trace2,trace3,trace4,trace5,trace6,trace7,trace8,\
+            trace9,trace10,trace11,trace12,trace13,trace14,trace15,trace16,\
+            trace17,trace18,trace19]
+    layout = go.Layout(
+        title='Calendar Return of Pair Funds and Other Funds',
+        showlegend=False,
+        yaxis=dict(
+            title='Calendar Return')
+        )
+    fig_2 = go.Figure(data=data, layout=layout)
+    plot_url_2 = py.plot(fig_2, filename='Figure 2 Calendar Return of Pair Funds')    
+
     
     # Standard Deviation Table
     Standard_deviation_df = round(Standard_deviation_df,3)
@@ -184,8 +590,8 @@ if __name__ == '__main__':
         yaxis=dict(
             title='Rolling Sharpe Ratio')
         )
-    fig_2 = go.Figure(data=data, layout=layout)
-    plot_url_2 = py.plot(fig_2, filename='Figure 2 Rolling Sharpe Ratio of Pair Funds', sharing='public')    
+    fig_3 = go.Figure(data=data, layout=layout)
+    plot_url_3 = py.plot(fig_3, filename='Figure 3 Rolling Sharpe Ratio of Pair Funds', sharing='public')    
     
     # Sortino Ratio Table
     Sortino_df = round(Sortino_df,3)
@@ -220,8 +626,8 @@ if __name__ == '__main__':
         yaxis=dict(
             title='Rolling Sortino Ratio')
         )
-    fig_3 = go.Figure(data=data, layout=layout)
-    plot_url_3 = py.plot(fig_3, filename='Figure 3 Rolling Sortino Ratio of Pair Funds', sharing='public')
+    fig_4 = go.Figure(data=data, layout=layout)
+    plot_url_4 = py.plot(fig_4, filename='Figure 4 Rolling Sortino Ratio of Pair Funds', sharing='public')
     
     
     # Beta Table
@@ -257,8 +663,8 @@ if __name__ == '__main__':
         yaxis=dict(
             title='Rolling Beta')
         )
-    fig_4 = go.Figure(data=data, layout=layout)
-    plot_url_4 = py.plot(fig_4, filename='Figure 4 Beta with Russell 3000 of Pair Funds', sharing='public')    
+    fig_5 = go.Figure(data=data, layout=layout)
+    plot_url_5 = py.plot(fig_5, filename='Figure 5 Beta with Russell 3000 of Pair Funds', sharing='public')    
     # Alpha Plot
     trace1 = go.Scatter(
         x=rolling_alpha_df.index,
@@ -287,8 +693,8 @@ if __name__ == '__main__':
         yaxis=dict(
             title='Rolling Alpha')
         )
-    fig_5 = go.Figure(data=data, layout=layout)
-    plot_url_5 = py.plot(fig_5, filename='Figure 5 Alpha of Pair Funds', sharing='public')   
+    fig_6 = go.Figure(data=data, layout=layout)
+    plot_url_6 = py.plot(fig_6, filename='Figure 6 Alpha of Pair Funds', sharing='public')   
     
     
     # Omega Ratio Table
@@ -324,8 +730,8 @@ if __name__ == '__main__':
         yaxis=dict(
             title='Rolling Omega Ratio')
         )
-    fig_6 = go.Figure(data=data, layout=layout)
-    plot_url_6 = py.plot(fig_6, filename='Figure 6 Rolling Omega Ratio of Pair Funds', sharing='public')
+    fig_7 = go.Figure(data=data, layout=layout)
+    plot_url_7 = py.plot(fig_7, filename='Figure 7 Rolling Omega Ratio of Pair Funds', sharing='public')
 
     # Correlation Table
     Corr_df = round(Corr_df,3)
@@ -360,239 +766,192 @@ if __name__ == '__main__':
         yaxis=dict(
             title='Rolling Correlation')
         )
-    fig_7 = go.Figure(data=data, layout=layout)
-    plot_url_7 = py.plot(fig_7, filename='Figure 7 Rolling Correlation of Pair Funds', sharing='public')
+    fig_8 = go.Figure(data=data, layout=layout)
+    plot_url_8 = py.plot(fig_8, filename='Figure 8 Rolling Correlation of Pair Funds', sharing='public')
     
-    # Calendar Return Plot #
+
+'''    
+    # Double Box Chart with Fund and other Funds
+    c = ['hsl('+str(h)+',50%'+',50%)' for h in np.linspace(0, 360, 20)]
+    x_2007 = ['2007','2007','2007','2007','2007','2007','2007','2007','2007','2007']
+    x_2008 = ['2008','2008','2008','2008','2008','2008','2008','2008','2008','2008']
+    x_2009 = ['2009','2009','2009','2009','2009','2009','2009','2009','2009','2009']
+    x_2010 = ['2010','2010','2010','2010','2010','2010','2010','2010','2010','2010']
+    x_2011 = ['2011','2011','2011','2011','2011','2011','2011','2011','2011','2011']
+    x_2012 = ['2012','2012','2012','2012','2012','2012','2012','2012','2012','2012']
+    x_2013 = ['2013','2013','2013','2013','2013','2013','2013','2013','2013','2013']
+    x_2014 = ['2014','2014','2014','2014','2014','2014','2014','2014','2014','2014']
+    x_2015 = ['2015','2015','2015','2015','2015','2015','2015','2015','2015','2015']
+    x_2016 = ['2016','2016','2016','2016','2016','2016','2016','2016','2016','2016']
     trace0=go.Box(
         y = Calendar_Return_df.ix[:,2007].values,
-        name = '2007',
-        showlegend=False
+        x=x_2007,
+        name = 'Fund Portfolio',
+        marker=dict(
+                    color=c[0]
+                    )
                   )
-
     trace1=go.Box(
         y = Calendar_Return_df.ix[:,2008],
-        name = '2008',
-        showlegend=False
-              )
-    
+        x=x_2008,
+        name = 'Fund Portfolio',
+        marker=dict(
+                    color=c[0]
+                    )
+                  )    
     trace2=go.Box(
         y = Calendar_Return_df.ix[:,2009],
-        name = '2009',
-        showlegend=False
-                  )
-    
+        x=x_2009,
+        name = 'Fund Portfolio',
+        marker=dict(
+                    color=c[0]
+                    )
+                  )    
     trace3=go.Box(
         y = Calendar_Return_df.ix[:,2010],
-        name = '2010',
-        showlegend=False
-                  )
-    
+        x=x_2010,
+        name = 'Fund Portfolio',
+        marker=dict(
+                    color=c[0]
+                    )
+                  )    
     trace4=go.Box(
         y = Calendar_Return_df.ix[:,2011],
-        name = '2011',
-        showlegend=False
-                  )
-    
+        x=x_2011,
+        name = 'Fund Portfolio',
+        marker=dict(
+                    color=c[0]
+                    )
+                  )    
     trace5=go.Box(
         y = Calendar_Return_df.ix[:,2012],
-        name = '2012',
-        showlegend=False
-                  )
-    
+        x=x_2012,
+        name = 'Fund Portfolio',
+        marker=dict(
+                    color=c[0]
+                    )
+                  )    
     trace6=go.Box(
         y = Calendar_Return_df.ix[:,2013],
-        name = '2013',
-        showlegend=False
-                  )
-    
+        x=x_2012,
+        name = 'Fund Portfolio',
+        marker=dict(
+                    color=c[0]
+                    )
+                  )    
     trace7=go.Box(
         y = Calendar_Return_df.ix[:,2014],
-        name = '2014',
-        showlegend=False
+        x=x_2014,
+        name = 'Fund Portfolio',
+        marker=dict(
+                    color=c[0]
+                    )
                   )
-
     trace8=go.Box(
         y = Calendar_Return_df.ix[:,2015],
-        name = '2015',
-        showlegend=False
+        x=x_2015,
+        name = 'Fund Portfolio',
+        marker=dict(
+                    color=c[0]
+                    )
                   )
-    trace8=go.Box(
+    trace9=go.Box(
         y = Calendar_Return_df.ix[:,2016],
-        name = '2016',
-        showlegend=False
+        x=x_2016,
+        name = 'Fund Portfolio',
+        marker=dict(
+                    color=c[0]
+                    )
                   )
-
-    trace9=go.Scatter(
-        x = Calendar_Return_df.T.index,
-        y = Calendar_Return_df.ix['A'].values,
-        mode = 'markers',
-        marker = dict(size=15, opacity=0.3),
-        name = 'A'
-        )
-
-    trace10=go.Scatter(
-        x = Calendar_Return_df.T.index,
-        y = Calendar_Return_df.ix['B'].values,
-        mode = 'markers',
-        marker = dict(size=15, opacity=0.3),
-        name = 'B'
-        )
-    
-    trace11=go.Scatter(
-        x = Calendar_Return_df.T.index,
-        y = Calendar_Return_df.ix['C'].values,
-        mode = 'markers',
-        marker = dict(size=15, opacity=0.3),
-        name = 'C'
-        )
-    
-    trace12=go.Scatter(
-        x = Calendar_Return_df.T.index,
-        y = Calendar_Return_df.ix['D'].values,
-        mode = 'markers',
-        marker = dict(size=15, opacity=0.3),
-        name = 'D'
-        )
-    
-    trace13=go.Scatter(
-        x = Calendar_Return_df.T.index,
-        y = Calendar_Return_df.ix['E'].values,
-        mode = 'markers',
-        marker = dict(size=15, opacity=0.3),
-        name = 'E'
-        )
-    
-    trace14=go.Scatter(
-        x = Calendar_Return_df.T.index,
-        y = Calendar_Return_df.ix['F'].values,
-        mode = 'markers',
-        marker = dict(size=15, opacity=0.3),
-        name = 'F'
-        )
-    
-    trace15=go.Scatter(
-        x = Calendar_Return_df.T.index,
-        y = Calendar_Return_df.ix['G'].values,
-        mode = 'markers',
-        marker = dict(size=15, opacity=0.3),
-        name = 'G'
-        )
-    trace16=go.Scatter(
-        x = Calendar_Return_df.T.index,
-        y = Calendar_Return_df.ix['H'].values,
-        mode = 'markers',
-        marker = dict(size=15, opacity=0.3),
-        name = 'H'
-        )
-
-    trace17=go.Scatter(
-        x = Calendar_Return_df.T.index,
-        y = Calendar_Return_df.ix['I'].values,
-        mode = 'markers',
-        marker = dict(size=15, opacity=0.3),
-        name = 'I'
-        )
-    
-    trace18=go.Scatter(
-        x = Calendar_Return_df.T.index,
-        y = Calendar_Return_df.ix['J'].values,
-        mode = 'markers',
-        marker = dict(size=15, opacity=0.3),
-        name = 'J'
-        )
-    
-    trace19=go.Scatter(
-        x = Calendar_Return_df.T.index,
-        y = Calendar_Return_df.ix['K'].values,
-        mode = 'markers',
-        marker = dict(size=15, opacity=0.3),
-        name = 'K'
-        )
-    
-    trace20=go.Scatter(
-        x = Calendar_Return_df.T.index,
-        y = Calendar_Return_df.ix['L'].values,
-        mode = 'markers',
-        marker = dict(size=15, opacity=0.3),
-        name = 'L'
-        )
-    
-    trace21=go.Scatter(
-        x = Calendar_Return_df.T.index,
-        y = Calendar_Return_df.ix['M'].values,
-        mode = 'markers',
-        marker = dict(size=15, opacity=0.3),
-        name = 'M'
-        )
-    
-    trace22=go.Scatter(
-        x = Calendar_Return_df.T.index,
-        y = Calendar_Return_df.ix['N'].values,
-        mode = 'markers',
-        marker = dict(size=15, opacity=0.3),
-        name = 'N'
-        )
-        
-    trace23=go.Scatter(
-        x = Calendar_Return_df.T.index,
-        y = Calendar_Return_df.ix['O'].values,
-        mode = 'markers',
-        marker = dict(size=15, opacity=0.3),
-        name = 'O'
-        )
-
-    trace24=go.Scatter(
-        x = Calendar_Return_df.T.index,
-        y = Calendar_Return_df.ix['P'].values,
-        mode = 'markers',
-        marker = dict(size=15, opacity=0.3),
-        name = 'P'
-        )
-    
-    trace25=go.Scatter(
-        x = Calendar_Return_df.T.index,
-        y = Calendar_Return_df.ix['Q'].values,
-        mode = 'markers',
-        marker = dict(size=15, opacity=0.3),
-        name = 'Q'
-        )
-    
-    trace26=go.Scatter(
-        x = Calendar_Return_df.T.index,
-        y = Calendar_Return_df.ix['R'].values,
-        mode = 'markers',
-        marker = dict(size=15, opacity=0.3),
-        name = 'R'
-        )
-    
-    trace27=go.Scatter(
-        x = Calendar_Return_df.T.index,
-        y = Calendar_Return_df.ix['S'].values,
-        mode = 'markers',
-        marker = dict(size=15, opacity=0.3),
-        name = 'S'
-        )
-    
-    trace28=go.Scatter(
-        x = Calendar_Return_df.T.index,
-        y = Calendar_Return_df.ix['T'].values,
-        mode = 'markers',
-        marker = dict(size=15, opacity=0.3),
-        name = 'T'
-        )
-    
-    trace29=go.Scatter(
-        x = Calendar_Return_df.T.index,
-        y = Calendar_Return_df.ix['U'].values,
-        mode = 'markers',
-        marker = dict(size=15, opacity=0.3),
-        name = 'U'
-        )
-    
+    trace10=go.Box(
+        y = Calendar_Return_df_other.ix[:,2007].values,
+        x=x_2007,
+        name = 'Other Funds',
+        marker=dict(
+                    color=c[9]
+                    )
+                  )
+    trace11=go.Box(
+        y = Calendar_Return_df_other.ix[:,2008],
+        x=x_2008,
+        name = 'Other Funds',
+        marker=dict(
+                    color=c[9]
+                    )
+              )    
+    trace12=go.Box(
+        y = Calendar_Return_df_other.ix[:,2009],
+        x=x_2009,
+        name = 'Other Funds',
+        marker=dict(
+                    color=c[9]
+                    )
+                  )    
+    trace13=go.Box(
+        y = Calendar_Return_df_other.ix[:,2010],
+        x=x_2010,
+        name = 'Other Funds',
+        marker=dict(
+                    color=c[9]
+                    )
+                  )    
+    trace14=go.Box(
+        y = Calendar_Return_df_other.ix[:,2011],
+        x=x_2011,
+        name = 'Other Funds',
+        marker=dict(
+                    color=c[9]
+                    )
+                  )    
+    trace15=go.Box(
+        y = Calendar_Return_df_other.ix[:,2012],
+        x=x_2012,
+        name = 'Other Funds',
+        marker=dict(
+                    color=c[9]
+                    )
+                  )    
+    trace16=go.Box(
+        y = Calendar_Return_df_other.ix[:,2013],
+        x=x_2013,
+        name = 'Other Funds',
+        marker=dict(
+                    color=c[9]
+                    )
+                  )    
+    trace17=go.Box(
+        y = Calendar_Return_df_other.ix[:,2014],
+        x=x_2014,
+        name = 'Other Funds',
+        marker=dict(
+                    color=c[9]
+                    )
+                  )
+    trace18=go.Box(
+        y = Calendar_Return_df_other.ix[:,2015],
+        x=x_2015,
+        name = 'Other Funds',
+        marker=dict(
+                    color=c[9]
+                    )
+                  )
+    trace19=go.Box(
+        y = Calendar_Return_df_other.ix[:,2016],
+        x=x_2016,
+        name = 'Other Funds',
+        marker=dict(
+                    color=c[9]
+                    )
+                  )
     data = [trace0,trace1,trace2,trace3,trace4,trace5,trace6,trace7,trace8,\
             trace9,trace10,trace11,trace12,trace13,trace14,trace15,trace16,\
-            trace17,trace18,trace19,trace20,trace21,trace22,trace23,trace24,\
-            trace25,trace26,trace27,trace28,trace29]
-    py.plot(data)
-    
+            trace17,trace18,trace19]
+    layout = go.Layout(
+        title='Calendar Return of Pair Funds and Other Funds',
+        showlegend=False,
+        yaxis=dict(
+            title='Calendar Return')
+        )
+    fig_2 = go.Figure(data=data, layout=layout)
+    plot_url_2 = py.plot(fig_2, filename='Figure 22 Calendar Return of Pair Funds')    
+'''    
