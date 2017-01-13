@@ -95,100 +95,339 @@ if __name__ == '__main__':
     ### Draw Down
     dd_df = 100* m.draw_down(df_data, columns_name)
     
-   
-    ### Output all static dataframe into excel file
-    dfs = [Annulized_Return_df,Calendar_Return_df,Sharpe_df,Sortino_df,\
-           Standard_deviation_df,Downside_Deviation_df,Beta_df,Beta_df_p,\
-           Beta_df_np,Omega_df,Corr_df,Corr_df_p,Corr_df_np,Summary_table_df]
-    put.multiple_dfs(dfs, 'Financial Ratio', 'Financial Ratio Result.xlsx', 1)
-    
-    ### Output all rolling data to seperated sheet in excel file
-    rolling_df_list = [rolling_beta_df,rolling_annual_return_df,cum_return_df,\
-                       rolling_sortino_ratio_df,rolling_omega_ratio_df,rolling_sharpe_ratio_df,\
-                       rolling_alpha_df,rolling_corr_df]
-    put.multiple_sheets(rolling_df_list, 'Rolling Result.xlsx')
     
     
     
     ### Plotly Table ###
+    # Annual Return Table
     Annulized_Return_df = round(Annulized_Return_df,3)
     table_Annulized_Return = FF.create_table(Annulized_Return_df, index=True)
-    py.plot(table_Annulized_Return, filename='Annulized_Return_df')
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    py.plot(table_Annulized_Return, filename='Table 1 Annulized Return')
+    # Annual Return Plot
+    trace1 = go.Scatter(
+        x=rolling_annual_return_df.index,
+        y=rolling_annual_return_df['A'],
+        name='A'
+        )
+    trace2 = go.Scatter(
+        x=rolling_annual_return_df.index,
+        y=rolling_annual_return_df['B'],
+        name='B'
+        )
+    trace3 = go.Scatter(
+        x=rolling_annual_return_df.index,
+        y=rolling_annual_return_df['C'],
+        name='C'
+        )
+    trace4 = go.Scatter(
+        x=rolling_annual_return_df.index,
+        y=rolling_annual_return_df['D'],
+        name='D'
+        )
+
+    data = [trace1,trace2,trace3,trace4]
+    layout = go.Layout(
+        title='Rolling Annual Return of Pair Funds',
+        showlegend=True,
+        yaxis=dict(
+            title='Rolling Annualized Return')
+        )
+    fig_1 = go.Figure(data=data, layout=layout)
+    plot_url_1 = py.plot(fig_1, filename='Figure 1 Rolling Annual Return of Pair Funds', sharing='public')
     
 
-    ### Plotly ###
+    # Calendar Return Table
+    Calendar_Return_df = round(Calendar_Return_df,3)
+    table_Calendar_Return = FF.create_table(Calendar_Return_df, index=True)
+    py.plot(table_Calendar_Return, filename='Table 2 Calendar Return of Pair Funds')    
+    
+    # Standard Deviation Table
+    Standard_deviation_df = round(Standard_deviation_df,3)
+    table_std = FF.create_table(Standard_deviation_df, index=True)
+    py.plot(table_std, filename='Table 3 Standard Deviation of Pair Funds')      
+    
+    # Downside Deviation Table
+    Downside_Deviation_df = round(Downside_Deviation_df,3)
+    table_down_d = FF.create_table(Downside_Deviation_df, index=True)
+    py.plot(table_down_d, filename='Table 4 Downside Deviation of Pair Funds')
+    
+    # Sharpe Ratio Table
+    Sharpe_df = round(Sharpe_df,3)
+    table_sharpe = FF.create_table(Sharpe_df, index=True)
+    py.plot(table_sharpe, filename='Table 5 Sharpe Ratio of Pair Funds')    
+    # Sharpe Ratio Plot
+    trace1 = go.Scatter(
+        x=rolling_sharpe_ratio_df.index,
+        y=rolling_sharpe_ratio_df['A'],
+        name='A'
+        )
+    trace2 = go.Scatter(
+        x=rolling_sharpe_ratio_df.index,
+        y=rolling_sharpe_ratio_df['B'],
+        name='B'
+        )
+    trace3 = go.Scatter(
+        x=rolling_sharpe_ratio_df.index,
+        y=rolling_sharpe_ratio_df['C'],
+        name='C'
+        )
+    trace4 = go.Scatter(
+        x=rolling_sharpe_ratio_df.index,
+        y=rolling_sharpe_ratio_df['D'],
+        name='D'
+        )
+
+    data = [trace1,trace2,trace3,trace4]
+    layout = go.Layout(
+        title='Rolling Sharpe Ratio of Pair Funds',
+        showlegend=True,
+        yaxis=dict(
+            title='Rolling Sharpe Ratio')
+        )
+    fig_2 = go.Figure(data=data, layout=layout)
+    plot_url_2 = py.plot(fig_2, filename='Figure 2 Rolling Sharpe Ratio of Pair Funds', sharing='public')    
+    
+    # Sortino Ratio Table
+    Sortino_df = round(Sortino_df,3)
+    table_sortino = FF.create_table(Sortino_df, index=True)
+    py.plot(table_sortino, filename='Table 5 Sortino Ratio of Pair Funds')    
+    # Sortino Ratio Plot
+    trace1 = go.Scatter(
+        x=rolling_sortino_ratio_df.index,
+        y=rolling_sortino_ratio_df['A'],
+        name='A'
+        )
+    trace2 = go.Scatter(
+        x=rolling_sortino_ratio_df.index,
+        y=rolling_sortino_ratio_df['B'],
+        name='B'
+        )
+    trace3 = go.Scatter(
+        x=rolling_sortino_ratio_df.index,
+        y=rolling_sortino_ratio_df['C'],
+        name='C'
+        )
+    trace4 = go.Scatter(
+        x=rolling_sortino_ratio_df.index,
+        y=rolling_sortino_ratio_df['D'],
+        name='D'
+        )
+
+    data = [trace1,trace2,trace3,trace4]
+    layout = go.Layout(
+        title='Rolling Sortino Ratio of Pair Funds',
+        showlegend=True,
+        yaxis=dict(
+            title='Rolling Sortino Ratio')
+        )
+    fig_3 = go.Figure(data=data, layout=layout)
+    plot_url_3 = py.plot(fig_3, filename='Figure 3 Rolling Sortino Ratio of Pair Funds', sharing='public')
+    
+    
+    # Beta Table
+    Beta_df = round(Beta_df,3)
+    table_beta = FF.create_table(Beta_df, index=True)
+    py.plot(table_beta, filename='Table 6 Beta with Russell 3000 of Pair Funds')    
+    # Beta Plot
+    trace1 = go.Scatter(
+        x=rolling_beta_df.index,
+        y=rolling_beta_df['A'],
+        name='A'
+        )
+    trace2 = go.Scatter(
+        x=rolling_beta_df.index,
+        y=rolling_beta_df['B'],
+        name='B'
+        )
+    trace3 = go.Scatter(
+        x=rolling_beta_df.index,
+        y=rolling_beta_df['C'],
+        name='C'
+        )
+    trace4 = go.Scatter(
+        x=rolling_beta_df.index,
+        y=rolling_beta_df['D'],
+        name='D'
+        )
+
+    data = [trace1,trace2,trace3,trace4]
+    layout = go.Layout(
+        title='Rolling Beta of Pair Funds',
+        showlegend=True,
+        yaxis=dict(
+            title='Rolling Beta')
+        )
+    fig_4 = go.Figure(data=data, layout=layout)
+    plot_url_4 = py.plot(fig_4, filename='Figure 4 Beta with Russell 3000 of Pair Funds', sharing='public')    
+    # Alpha Plot
+    trace1 = go.Scatter(
+        x=rolling_alpha_df.index,
+        y=rolling_alpha_df['A'],
+        name='A'
+        )
+    trace2 = go.Scatter(
+        x=rolling_alpha_df.index,
+        y=rolling_alpha_df['B'],
+        name='B'
+        )
+    trace3 = go.Scatter(
+        x=rolling_alpha_df.index,
+        y=rolling_alpha_df['C'],
+        name='C'
+        )
+    trace4 = go.Scatter(
+        x=rolling_alpha_df.index,
+        y=rolling_alpha_df['D'],
+        name='D'
+        )
+    data = [trace1,trace2,trace3,trace4]
+    layout = go.Layout(
+        title='Rolling Alpha of Pair Funds',
+        showlegend=True,
+        yaxis=dict(
+            title='Rolling Alpha')
+        )
+    fig_5 = go.Figure(data=data, layout=layout)
+    plot_url_5 = py.plot(fig_5, filename='Figure 5 Alpha of Pair Funds', sharing='public')   
+    
+    
+    # Omega Ratio Table
+    Omega_df = round(Omega_df,3)
+    table_omega = FF.create_table(Omega_df, index=True)
+    py.plot(table_omega, filename='Table 7 Omega Ratio of Pair Funds')    
+    # Omega Ratio Plot
+    trace1 = go.Scatter(
+        x=rolling_omega_ratio_df.index,
+        y=rolling_omega_ratio_df['A'],
+        name='A'
+        )
+    trace2 = go.Scatter(
+        x=rolling_omega_ratio_df.index,
+        y=rolling_omega_ratio_df['B'],
+        name='B'
+        )
+    trace3 = go.Scatter(
+        x=rolling_omega_ratio_df.index,
+        y=rolling_omega_ratio_df['C'],
+        name='C'
+        )
+    trace4 = go.Scatter(
+        x=rolling_sortino_ratio_df.index,
+        y=rolling_sortino_ratio_df['D'],
+        name='D'
+        )
+
+    data = [trace1,trace2,trace3,trace4]
+    layout = go.Layout(
+        title='Rolling Omega Ratio of Pair Funds',
+        showlegend=True,
+        yaxis=dict(
+            title='Rolling Omega Ratio')
+        )
+    fig_6 = go.Figure(data=data, layout=layout)
+    plot_url_6 = py.plot(fig_6, filename='Figure 6 Rolling Omega Ratio of Pair Funds', sharing='public')
+
+    # Correlation Table
+    Corr_df = round(Corr_df,3)
+    table_corr = FF.create_table(Corr_df, index=True)
+    py.plot(table_corr, filename='Table 8 Correlation of Pair Funds')    
+    # Correlation Plot
+    trace1 = go.Scatter(
+        x=rolling_corr_df.index,
+        y=rolling_corr_df['A'],
+        name='A'
+        )
+    trace2 = go.Scatter(
+        x=rolling_corr_df.index,
+        y=rolling_corr_df['B'],
+        name='B'
+        )
+    trace3 = go.Scatter(
+        x=rolling_corr_df.index,
+        y=rolling_corr_df['C'],
+        name='C'
+        )
+    trace4 = go.Scatter(
+        x=rolling_corr_df.index,
+        y=rolling_corr_df['D'],
+        name='D'
+        )
+
+    data = [trace1,trace2,trace3,trace4]
+    layout = go.Layout(
+        title='Rolling Correlation of Pair Funds',
+        showlegend=True,
+        yaxis=dict(
+            title='Rolling Correlation')
+        )
+    fig_7 = go.Figure(data=data, layout=layout)
+    plot_url_7 = py.plot(fig_7, filename='Figure 7 Rolling Correlation of Pair Funds', sharing='public')
+    
+    # Calendar Return Plot #
     trace0=go.Box(
-        y = Calendar_Return_df.ix[:,2007],
-        boxpoints='all',
-        jitter=0.5,
-        pointpos=0
+        y = Calendar_Return_df.ix[:,2007].values,
+        name = '2007',
+        showlegend=False
                   )
 
     trace1=go.Box(
         y = Calendar_Return_df.ix[:,2008],
-        boxpoints='all',
-        jitter=0.9,
-        pointpos=1.8
+        name = '2008',
+        showlegend=False
               )
     
     trace2=go.Box(
         y = Calendar_Return_df.ix[:,2009],
-        boxpoints='all',
-        jitter=0.9,
-        pointpos=1.5,
-        visible=True
+        name = '2009',
+        showlegend=False
                   )
     
     trace3=go.Box(
         y = Calendar_Return_df.ix[:,2010],
-        boxpoints='all',
-        jitter=0.9,
-        pointpos=1.5,
-        visible=True,
-        hoverinfo=True
+        name = '2010',
+        showlegend=False
                   )
     
     trace4=go.Box(
         y = Calendar_Return_df.ix[:,2011],
-        boxpoints='all',
-        jitter=0.9,
-        pointpos=1.5,
-        visible=True,
-        hoverinfo=True,
-        name='Test Name'
+        name = '2011',
+        showlegend=False
                   )
     
     trace5=go.Box(
-        y = Calendar_Return_df.ix[:,2012]
+        y = Calendar_Return_df.ix[:,2012],
+        name = '2012',
+        showlegend=False
                   )
     
     trace6=go.Box(
-        y = Calendar_Return_df.ix[:,2013]
+        y = Calendar_Return_df.ix[:,2013],
+        name = '2013',
+        showlegend=False
                   )
     
     trace7=go.Box(
-        y = Calendar_Return_df.ix[:,2014]
+        y = Calendar_Return_df.ix[:,2014],
+        name = '2014',
+        showlegend=False
                   )
 
     trace8=go.Box(
-        y = Calendar_Return_df.ix[:,2015]
+        y = Calendar_Return_df.ix[:,2015],
+        name = '2015',
+        showlegend=False
+                  )
+    trace8=go.Box(
+        y = Calendar_Return_df.ix[:,2016],
+        name = '2016',
+        showlegend=False
                   )
 
-    
     trace9=go.Scatter(
         x = Calendar_Return_df.T.index,
         y = Calendar_Return_df.ix['A'].values,
         mode = 'markers',
+        marker = dict(size=15, opacity=0.3),
         name = 'A'
         )
 
@@ -196,6 +435,7 @@ if __name__ == '__main__':
         x = Calendar_Return_df.T.index,
         y = Calendar_Return_df.ix['B'].values,
         mode = 'markers',
+        marker = dict(size=15, opacity=0.3),
         name = 'B'
         )
     
@@ -203,6 +443,7 @@ if __name__ == '__main__':
         x = Calendar_Return_df.T.index,
         y = Calendar_Return_df.ix['C'].values,
         mode = 'markers',
+        marker = dict(size=15, opacity=0.3),
         name = 'C'
         )
     
@@ -210,6 +451,7 @@ if __name__ == '__main__':
         x = Calendar_Return_df.T.index,
         y = Calendar_Return_df.ix['D'].values,
         mode = 'markers',
+        marker = dict(size=15, opacity=0.3),
         name = 'D'
         )
     
@@ -217,6 +459,7 @@ if __name__ == '__main__':
         x = Calendar_Return_df.T.index,
         y = Calendar_Return_df.ix['E'].values,
         mode = 'markers',
+        marker = dict(size=15, opacity=0.3),
         name = 'E'
         )
     
@@ -224,6 +467,7 @@ if __name__ == '__main__':
         x = Calendar_Return_df.T.index,
         y = Calendar_Return_df.ix['F'].values,
         mode = 'markers',
+        marker = dict(size=15, opacity=0.3),
         name = 'F'
         )
     
@@ -231,470 +475,124 @@ if __name__ == '__main__':
         x = Calendar_Return_df.T.index,
         y = Calendar_Return_df.ix['G'].values,
         mode = 'markers',
+        marker = dict(size=15, opacity=0.3),
         name = 'G'
         )
-    trace9=go.Scatter(
+    trace16=go.Scatter(
         x = Calendar_Return_df.T.index,
         y = Calendar_Return_df.ix['H'].values,
         mode = 'markers',
+        marker = dict(size=15, opacity=0.3),
         name = 'H'
         )
 
-    trace10=go.Scatter(
+    trace17=go.Scatter(
         x = Calendar_Return_df.T.index,
         y = Calendar_Return_df.ix['I'].values,
         mode = 'markers',
+        marker = dict(size=15, opacity=0.3),
         name = 'I'
         )
     
-    trace11=go.Scatter(
+    trace18=go.Scatter(
         x = Calendar_Return_df.T.index,
         y = Calendar_Return_df.ix['J'].values,
         mode = 'markers',
+        marker = dict(size=15, opacity=0.3),
         name = 'J'
         )
     
-    trace12=go.Scatter(
+    trace19=go.Scatter(
         x = Calendar_Return_df.T.index,
         y = Calendar_Return_df.ix['K'].values,
         mode = 'markers',
+        marker = dict(size=15, opacity=0.3),
         name = 'K'
         )
     
-    trace13=go.Scatter(
+    trace20=go.Scatter(
         x = Calendar_Return_df.T.index,
         y = Calendar_Return_df.ix['L'].values,
         mode = 'markers',
+        marker = dict(size=15, opacity=0.3),
         name = 'L'
         )
     
-    trace14=go.Scatter(
+    trace21=go.Scatter(
         x = Calendar_Return_df.T.index,
         y = Calendar_Return_df.ix['M'].values,
         mode = 'markers',
+        marker = dict(size=15, opacity=0.3),
         name = 'M'
         )
     
-    trace15=go.Scatter(
+    trace22=go.Scatter(
         x = Calendar_Return_df.T.index,
         y = Calendar_Return_df.ix['N'].values,
         mode = 'markers',
+        marker = dict(size=15, opacity=0.3),
         name = 'N'
         )
         
-    trace9=go.Scatter(
+    trace23=go.Scatter(
         x = Calendar_Return_df.T.index,
         y = Calendar_Return_df.ix['O'].values,
         mode = 'markers',
+        marker = dict(size=15, opacity=0.3),
         name = 'O'
         )
 
-    trace10=go.Scatter(
+    trace24=go.Scatter(
         x = Calendar_Return_df.T.index,
         y = Calendar_Return_df.ix['P'].values,
         mode = 'markers',
+        marker = dict(size=15, opacity=0.3),
         name = 'P'
         )
     
-    trace11=go.Scatter(
+    trace25=go.Scatter(
         x = Calendar_Return_df.T.index,
         y = Calendar_Return_df.ix['Q'].values,
         mode = 'markers',
+        marker = dict(size=15, opacity=0.3),
         name = 'Q'
         )
     
-    trace12=go.Scatter(
+    trace26=go.Scatter(
         x = Calendar_Return_df.T.index,
         y = Calendar_Return_df.ix['R'].values,
         mode = 'markers',
+        marker = dict(size=15, opacity=0.3),
         name = 'R'
         )
     
-    trace13=go.Scatter(
+    trace27=go.Scatter(
         x = Calendar_Return_df.T.index,
         y = Calendar_Return_df.ix['S'].values,
         mode = 'markers',
+        marker = dict(size=15, opacity=0.3),
         name = 'S'
         )
     
-    trace14=go.Scatter(
+    trace28=go.Scatter(
         x = Calendar_Return_df.T.index,
         y = Calendar_Return_df.ix['T'].values,
         mode = 'markers',
+        marker = dict(size=15, opacity=0.3),
         name = 'T'
         )
     
-    trace15=go.Scatter(
+    trace29=go.Scatter(
         x = Calendar_Return_df.T.index,
         y = Calendar_Return_df.ix['U'].values,
         mode = 'markers',
+        marker = dict(size=15, opacity=0.3),
         name = 'U'
         )
     
-    data = [trace0, trace1, trace2, trace3, trace4, trace5, trace6, trace7, trace8,trace9]
+    data = [trace0,trace1,trace2,trace3,trace4,trace5,trace6,trace7,trace8,\
+            trace9,trace10,trace11,trace12,trace13,trace14,trace15,trace16,\
+            trace17,trace18,trace19,trace20,trace21,trace22,trace23,trace24,\
+            trace25,trace26,trace27,trace28,trace29]
     py.plot(data)
     
-    
-    
-    
-    
-    
-    trace1 = {
-      "y": Calendar_Return_df.ix[:,2007].values, 
-      "boxpoints": False, 
-      "fillcolor": "rgb(221, 126, 107)", 
-      "line": {"color": "rgb(204, 65, 37)"}, 
-      "marker": {"line": {"color": "rgb(204, 65, 37)"}}, 
-      "name": "2007", 
-      "opacity": 0.5, 
-      "showlegend": False, 
-      "type": "box", 
-      "uid": "10e105"
-    }
-    trace2 = {
-      "y": Calendar_Return_df.ix[:,2008].values, 
-      "boxpoints": False, 
-      "fillcolor": "rgb(221, 126, 107)", 
-      "line": {"color": "rgb(204, 65, 37)"}, 
-      "marker": {"line": {"color": "rgb(204, 65, 37)"}}, 
-      "name": "2008", 
-      "opacity": 0.5, 
-      "showlegend": False, 
-      "type": "box", 
-      "uid": "14599d"
-    }
-    trace3 = {
-      "y": Calendar_Return_df.ix[:,2009].values, 
-      "boxpoints": False, 
-      "fillcolor": "rgb(221, 126, 107)", 
-      "line": {"color": "rgb(204, 65, 37)"}, 
-      "marker": {"line": {"color": "rgb(204, 65, 37)"}}, 
-      "name": "2009", 
-      "opacity": 0.5, 
-      "showlegend": False, 
-      "type": "box", 
-      "uid": "b43551"
-    }
-    trace4 = {
-      "y": Calendar_Return_df.ix[:,2010].values, 
-      "boxpoints": False, 
-      "fillcolor": "rgb(221, 126, 107)", 
-      "line": {"color": "rgb(204, 65, 37)"}, 
-      "marker": {"line": {"color": "rgb(204, 65, 37)"}}, 
-      "name": "2010", 
-      "opacity": 0.5, 
-      "showlegend": False, 
-      "type": "box", 
-      "uid": "af4eb5"
-    }
-    trace5 = {
-      "y": Calendar_Return_df.ix[:,2011].values, 
-      "boxpoints": False, 
-      "fillcolor": "rgb(221, 126, 107)", 
-      "line": {"color": "rgb(204, 65, 37)"}, 
-      "marker": {"line": {"color": "rgb(204, 65, 37)"}}, 
-      "name": "2011", 
-      "opacity": 0.5, 
-      "showlegend": False, 
-      "type": "box", 
-      "uid": "6606e4"
-    }
-    trace6 = {
-      "y": Calendar_Return_df.ix[:,2012].values, 
-      "boxpoints": False, 
-      "fillcolor": "rgb(221, 126, 107)", 
-      "line": {"color": "rgb(204, 65, 37)"}, 
-      "marker": {"line": {"color": "rgb(204, 65, 37)"}}, 
-      "name": "2012", 
-      "opacity": 0.5, 
-      "showlegend": False, 
-      "type": "box", 
-      "uid": "649f3e"
-    }
-    trace7 = {
-      "y": Calendar_Return_df.ix[:,2013].values, 
-      "boxpoints": False, 
-      "fillcolor": "rgb(221, 126, 107)", 
-      "line": {"color": "rgb(204, 65, 37)"}, 
-      "marker": {"line": {"color": "rgb(204, 65, 37)"}}, 
-      "name": "2013", 
-      "opacity": 0.5, 
-      "showlegend": False, 
-      "type": "box", 
-      "uid": "c9e8c9"
-    }
-    trace8 = {
-      "y": Calendar_Return_df.ix[:,2014].values, 
-      "boxpoints": False, 
-      "fillcolor": "rgb(221, 126, 107)", 
-      "line": {"color": "rgb(204, 65, 37)"}, 
-      "marker": {"line": {"color": "rgb(204, 65, 37)"}}, 
-      "name": "2014", 
-      "opacity": 0.5, 
-      "showlegend": False, 
-      "type": "box", 
-      "uid": "830707"
-    }
-    trace9 = {
-      "y": Calendar_Return_df.ix[:,2015].values, 
-      "boxpoints": False, 
-      "fillcolor": "rgb(221, 126, 107)", 
-      "line": {"color": "rgb(204, 65, 37)"}, 
-      "marker": {"line": {"color": "rgb(204, 65, 37)"}}, 
-      "name": "2015", 
-      "opacity": 0.5, 
-      "showlegend": False, 
-      "type": "box", 
-      "uid": "383b5f"
-    }
-    trace10 = {
-      "y": Calendar_Return_df.ix[:,2016].values, 
-      "boxpoints": False, 
-      "fillcolor": "rgb(221, 126, 107)", 
-      "line": {"color": "rgb(204, 65, 37)"}, 
-      "marker": {"line": {"color": "rgb(204, 65, 37)"}}, 
-      "name": "2016", 
-      "opacity": 0.5, 
-      "showlegend": False, 
-      "type": "box", 
-      "uid": "524bf3"
-    }
-
-    trace11 = {
-      "x": Calendar_Return_df.T.index, 
-      "y": Calendar_Return_df.T.values, 
-      "line": {"color": "rgb(166, 28, 0)"}, 
-      "marker": {"line": {"color": "rgb(166, 28, 0)"}}, 
-      "name": "Highs (2014 YTD)", 
-      "type": "scatter", 
-      "uid": "0077fc"
-    }
-
-    data = Data([trace1, trace2, trace3, trace4, trace5, trace6, trace7, trace8, trace9, trace10, trace11])
-    layout = {
-      "annotations": [
-        {
-          "x": 0.555051813472, 
-          "y": 0.0858364762931, 
-          "align": "center", 
-          "arrowcolor": "", 
-          "arrowhead": 1, 
-          "arrowsize": 1, 
-          "arrowwidth": 0, 
-          "ax": 52, 
-          "ay": 25.828125, 
-          "bgcolor": "rgba(0,0,0,0)", 
-          "bordercolor": "", 
-          "borderpad": 1, 
-          "borderwidth": 1, 
-          "font": {
-            "color": "", 
-            "family": "", 
-            "size": 0
-          }, 
-          "opacity": 1, 
-          "showarrow": False, 
-          "text": "Box & whisker plots refer to average highs/lows from 1945-2013.", 
-          "textangle": 0, 
-          "xanchor": "center", 
-          "xref": "paper", 
-          "yanchor": "middle", 
-          "yref": "paper"
-        }, 
-        {
-          "x": 0.545984455959, 
-          "y": 0.0427330280172, 
-          "align": "center", 
-          "arrowcolor": "", 
-          "arrowhead": 1, 
-          "arrowsize": 1, 
-          "arrowwidth": 0, 
-          "ax": -10, 
-          "ay": -28.171875, 
-          "bgcolor": "rgba(0,0,0,0)", 
-          "bordercolor": "", 
-          "borderpad": 1, 
-          "borderwidth": 1, 
-          "font": {
-            "color": "", 
-            "family": "", 
-            "size": 0
-          }, 
-          "opacity": 1, 
-          "showarrow": False, 
-          "text": "YTD data current through 14 August 2014.", 
-          "textangle": 0, 
-          "xanchor": "center", 
-          "xref": "paper", 
-          "yanchor": "middle", 
-          "yref": "paper"
-        }, 
-        {
-          "x": 0.0874587458746, 
-          "y": -0.123866421569, 
-          "align": "center", 
-          "arrowcolor": "", 
-          "arrowhead": 1, 
-          "arrowsize": 1, 
-          "arrowwidth": 0, 
-          "ax": -10, 
-          "ay": -28.171875, 
-          "bgcolor": "rgba(0,0,0,0)", 
-          "bordercolor": "", 
-          "borderpad": 1, 
-          "borderwidth": 1, 
-          "font": {
-            "color": "", 
-            "family": "", 
-            "size": 0
-          }, 
-          "opacity": 1, 
-          "showarrow": False, 
-          "text": "Graph by Nate Johnson @nsj / Data source: SERCC", 
-          "textangle": 0, 
-          "xanchor": "center", 
-          "xref": "paper", 
-          "yanchor": "middle", 
-          "yref": "paper"
-        }
-      ], 
-      "autosize": True, 
-      "bargap": 0.2, 
-      "bargroupgap": 0, 
-      "barmode": "group", 
-      "boxgap": 0.3, 
-      "boxgroupgap": 0.3, 
-      "boxmode": "overlay", 
-      "dragmode": "pan", 
-      "font": {
-        "color": "#444", 
-        "family": "\"Open sans\", verdana, arial, sans-serif", 
-        "size": 12
-      }, 
-      "height": 690, 
-      "hidesources": False, 
-      "hovermode": "x", 
-      "legend": {
-        "x": 0.458549222798, 
-        "y": 0.209051724138, 
-        "bgcolor": "#fff", 
-        "bordercolor": "#444", 
-        "borderwidth": 0, 
-        "font": {
-          "color": "", 
-          "family": "", 
-          "size": 0
-        }, 
-        "traceorder": "normal", 
-        "xanchor": "left", 
-        "yanchor": "top"
-      }, 
-      "margin": {
-        "r": 80, 
-        "t": 100, 
-        "autoexpand": True, 
-        "b": 80, 
-        "l": 80, 
-        "pad": 0
-      }, 
-      "paper_bgcolor": "#fff", 
-      "plot_bgcolor": "#fff", 
-      "separators": ".,", 
-      "showlegend": True, 
-      "smith": False, 
-      "title": "Monthly Average Temperatures at RDU", 
-      "titlefont": {
-        "color": "", 
-        "family": "", 
-        "size": 0
-      }, 
-      "width": 1142, 
-      "xaxis": {
-        "anchor": "y", 
-        "autorange": True, 
-        "autotick": True, 
-        "domain": [0, 1], 
-        "dtick": 1, 
-        "exponentformat": "B", 
-        "gridcolor": "#eee", 
-        "gridwidth": 1, 
-        "linecolor": "#444", 
-        "linewidth": 1, 
-        "mirror": False, 
-        "nticks": 0, 
-        "overlaying": False, 
-        "position": 0, 
-        "range": [-0.605263157895, 11.5], 
-        "rangemode": "normal", 
-        "showexponent": "all", 
-        "showgrid": False, 
-        "showline": False, 
-        "showticklabels": True, 
-        "tick0": 0, 
-        "tickangle": "auto", 
-        "tickcolor": "#444", 
-        "tickfont": {
-          "color": "", 
-          "family": "", 
-          "size": 0
-        }, 
-        "ticklen": 5, 
-        "ticks": "", 
-        "tickwidth": 1, 
-        "title": "Months", 
-        "titlefont": {
-          "color": "", 
-          "family": "", 
-          "size": 0
-        }, 
-        "type": "category", 
-        "zeroline": False, 
-        "zerolinecolor": "#444", 
-        "zerolinewidth": 1
-      }, 
-      "yaxis": {
-        "anchor": "x", 
-        "autorange": True, 
-        "autotick": True, 
-        "domain": [0, 1], 
-        "dtick": 10, 
-        "exponentformat": "B", 
-        "gridcolor": "#eee", 
-        "gridwidth": 1, 
-        "linecolor": "#444", 
-        "linewidth": 1, 
-        "mirror": False, 
-        "nticks": 0, 
-        "overlaying": False, 
-        "position": 0, 
-        "range": [11.2388888889, 100.461111111], 
-        "rangemode": "normal", 
-        "showexponent": "all", 
-        "showgrid": True, 
-        "showline": False, 
-        "showticklabels": True, 
-        "tick0": 0, 
-        "tickangle": "auto", 
-        "tickcolor": "#444", 
-        "tickfont": {
-          "color": "", 
-          "family": "", 
-          "size": 0
-        }, 
-        "ticklen": 5, 
-        "ticks": "", 
-        "tickwidth": 1, 
-        "title": "Monthly Average Temperatures", 
-        "titlefont": {
-          "color": "", 
-          "family": "", 
-          "size": 0
-        }, 
-        "type": "linear", 
-        "zeroline": True, 
-        "zerolinecolor": "#444", 
-        "zerolinewidth": 1
-      }
-    }
-    fig = Figure(data=data, layout=layout)
-    plot_url = py.plot(fig)
